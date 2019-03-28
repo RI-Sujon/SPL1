@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1553052156 source:c:\users\aminul\desktop\splproject\main.c
+	<stdio.h>
+	<stdlib.h>
+	"library.h"
+
+1553051942 source:c:\users\aminul\desktop\splproject\work2.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"library.h"
+
+1553052352 source:c:\users\aminul\desktop\splproject\work1.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"library.h"
+
+1553050875 c:\users\aminul\desktop\splproject\library.h
+
+1553765053 source:c:\users\aminul\desktop\final spl\splproject\main.c
+	<stdio.h>
+	<stdlib.h>
+	"library.h"
+
+1553764776 c:\users\aminul\desktop\final spl\splproject\library.h
+
+1553765212 source:c:\users\aminul\desktop\final spl\splproject\work1.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"library.h"
+
+1553764920 source:c:\users\aminul\desktop\final spl\splproject\work2.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"library.h"
+
