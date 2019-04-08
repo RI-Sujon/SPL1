@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1554592492 source:c:\users\aminul\desktop\april5\htmlperser.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"library.h"
+
+1554592655 c:\users\aminul\desktop\april5\library.h
+
+1554592468 source:c:\users\aminul\desktop\april5\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1554592195 source:c:\users\aminul\desktop\april5\treetraverse.c
+	"library.h"
+	<stdlib.h>
+
