@@ -1,23 +1,122 @@
-#include"library.h"
 #include<stdlib.h>
-
-void outputTreePreOrder(struct Node *parent)
-{
-    printf("%s\n",parent->tag) ;
-    int i ;
-    for(i=0 ; i<10 ; i++){
-
-        if((parent->children[i])!=NULL)
-        {
-            outputTreePreOrder(parent->children[i]) ;
-        }
-    }
-}
+#include"library.h"
 
 char fullTag[1000] ;
 int count = 0 ;
 
-void getTagInfo(struct Node *current){
+char* findAll(struct Node *current,char *tag){
+    char str_Tag[100] ;
+    int count_TagChar = 0 ,i;
+
+    if(tag[0]=='['){
+        for(i=1 ; i<strlen(tag)+1 && tag[i]!=']' ; i++){
+            if(tag[i]==','||tag[i]=='\0'){
+
+                str_Tag[count_TagChar] = '\0';
+                 printf("test:  %s\n",str_Tag) ;
+
+                findAll_byTag(current,str_Tag) ;
+                count_TagChar = 0 ;
+                memset(str_Tag, 0, sizeof(str_Tag));
+                continue ;
+            }
+
+            str_Tag[count_TagChar] = tag[i];
+            count_TagChar++ ;
+        }
+    }
+
+    else if(tag[0]=='<'){
+        for(i=0 ; i<strlen(tag) ; i++){
+            str_Tag[count_TagChar] = tag[i];
+            count_TagChar++ ;
+
+            if(tag[i]=='>'){
+
+                str_Tag[count_TagChar] = '\0';
+                printf("test:  %s\n",str_Tag) ;
+
+                findAll_byTag(current,str_Tag) ;
+                count_TagChar = 0 ;
+                memset(str_Tag, 0, sizeof(str_Tag));
+                break ;
+            }
+        }
+
+    }
+
+    if(tag[i+1]==','){
+        printf("matha\n") ;
+        for(i=i+2;i<strlen(tag)+1 ; i++){
+            if(tag[i]==','|| tag[i]=='\0'){
+                str_Tag[count_TagChar] = '\0';
+                printf("attr:%s\n",str_Tag);
+                findAll_checkAttr(str_Tag) ;
+            }
+
+            str_Tag[count_TagChar] = tag[i];
+            count_TagChar++ ;
+        }
+    }
+
+    fullTag[count-2] = '\0' ;
+    return fullTag;
+}
+
+void findAll_checkAttr(char *attr){
+    int i ,count_str=0;
+    char str[100] ;
+    for(i=0 ; i<count ; i++){
+
+        if(fullTag[i]==' '){
+            str[count_str]='\0' ;
+            printf("checkAttr:%s\n",str) ;
+            if(strcmp(str,attr)==0){
+                printf("ok\n");
+            }
+            count_str=0 ;
+            memset(str, 0, sizeof(str));
+            continue ;
+
+        }
+
+        str[count_str]=fullTag[i] ;
+        count_str++ ;
+
+    }
+}
+
+void findAll_byTag(struct Node *current,char tag[100]){
+    int i , flagforEquality = 0 ;
+    char *strr = current->tag ;
+
+    for(i=0 ; i<strlen(strr)&&strlen(strr)==strlen(tag) ; i++){
+
+            flagforEquality = 1 ;
+            if(strr[i]!=tag[i]) {
+                    flagforEquality = -1 ;
+                break ;
+            }
+    }
+
+     if(flagforEquality==1){
+        findAll_byTag_getFullTag(current) ;
+        fullTag[count] = ',' ;
+        count++ ;
+        fullTag[count] = '\n' ;
+        count++ ;
+     }
+
+    for(i=0 ; i<10 ; i++){
+
+        if((current->children[i])!=NULL)
+        {
+            findAll_byTag(current->children[i] ,tag ) ;
+        }
+    }
+}
+
+void findAll_byTag_getFullTag(struct Node *current){
 
     int j , flag = -1;
 
@@ -46,7 +145,7 @@ void getTagInfo(struct Node *current){
     for(i=0 ; i<10 ; i++){
         if((current->children[i])!=NULL)
         {
-            getTagInfo(current->children[i]) ;
+            findAll_byTag_getFullTag(current->children[i]) ;
         }
     }
 
@@ -63,34 +162,21 @@ void getTagInfo(struct Node *current){
      }
 }
 
-void getTag(struct Node *current,char tag[100]){
-    int i , flagforEquality = 0 ;
-    char *strr = current->tag ;
 
-    for(i=0 ; i<strlen(strr)&&strlen(strr)==strlen(tag) ; i++){
 
-            flagforEquality = 1 ;
-            if(strr[i]!=tag[i]) {
-                    flagforEquality = -1 ;
-                break ;
-            }
-    }
-
-     if(flagforEquality==1){
-        getTagInfo(current) ;
-        printf("fullTag: %s\n",fullTag) ;
-        memset(fullTag, 0, sizeof(fullTag));
-        count = 0 ;
-     }
-
+void outputTreePreOrder(struct Node *parent)
+{
+    printf("%s\n",parent->tag) ;
+    int i ;
     for(i=0 ; i<10 ; i++){
 
-        if((current->children[i])!=NULL)
+        if((parent->children[i])!=NULL)
         {
-            getTag(current->children[i] ,tag ) ;
+            outputTreePreOrder(parent->children[i]) ;
         }
     }
 }
+
 
 void getTagAttributeOrString(struct Node *current,char tagStr[100],char ch){
 
@@ -206,7 +292,7 @@ void menu(struct Node *root){
         if(choice == 1) {
             printf("Enter Tag Name : ") ;
             scanf( "%s" ,&tagStr );
-            getTag(root,tagStr) ;
+            //getTag(root,tagStr) ;
         }
 
         if(choice == 2){
@@ -244,3 +330,4 @@ void menu(struct Node *root){
     }
 
 }
+
