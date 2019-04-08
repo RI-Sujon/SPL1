@@ -4,7 +4,8 @@
 int main()
 {
     struct Node *root = htmlPerser() ;
-    
-
+    char *sujon = findAll(root,"<font>,face=Calibri") ;
+    printf("%s\n",sujon) ;
     return 0 ;
 }
+
