@@ -3,9 +3,9 @@
 
 int main()
 {
-    struct Node *root = htmlPerser() ;
+    struct Node *root = htmlPerser() ;;
     char *sujon = findAll(root,"<font>,face=Calibri") ;
-    printf("%s\n",sujon) ;
+    printf("%s ghjgj\n",sujon) ;
     return 0 ;
 }
 
