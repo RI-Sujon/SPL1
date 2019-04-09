@@ -3,6 +3,8 @@
 
 char fullTag[1000] ;
 int count = 0 ;
+char *emptyTagList1[] = {"<br>" , "<hr>" , "<img>" , "<input>" , "<link>" , "<meta>" , "<source>"} ;
+int flagForEmptyTag1 = 0 ;
 
 char* findAll(struct Node *current,char *tag){
     char str_Tag[100] ;
@@ -150,14 +152,27 @@ void findAll_byTag_getFullTag(struct Node *current){
     }
 
     if((current->tag)[0]=='<'){
-        fullTag[count] = '<' ;
-        count++ ;
-        fullTag[count] = '/' ;
-        count++ ;
-        int k ;
-        for(k=1 ; k<strlen(current->tag) ; k++){
-            fullTag[count] = (current->tag)[k] ;
+        int i ;
+        for(i=0 ; i < 7 ; i++){
+            printf("%s\t%s\n",current->tag , emptyTagList1[i]) ;
+            if(strcmp(current->tag , emptyTagList1[i])==0){
+                flagForEmptyTag1 = 1 ;
+                printf("matching:%s\t%s\n",current->tag , emptyTagList1[i]) ;
+            }
+        }
+
+        if(flagForEmptyTag1!=1){
+            fullTag[count] = '<' ;
             count++ ;
+            fullTag[count] = '/' ;
+            count++ ;
+            int k ;
+            for(k=1 ; k<strlen(current->tag) ; k++){
+                fullTag[count] = (current->tag)[k] ;
+                count++ ;
+            }
+
+            flagForEmptyTag1 = 0 ;
         }
      }
 }
@@ -303,26 +318,26 @@ void menu(struct Node *root){
 
         if(choice == 3){
             printf("Enter Tag Name : ") ;
-            scanf( "%s" ,&tagStr );
+            //scanf( "%s" ,&tagStr );
             getTagAttributeOrString(root,tagStr,'~') ;
         }
 
         if(choice == 4){
             printf("Enter Tag Name : ") ;
-            scanf( "%s" ,&tagStr );
+            //scanf( "%s" ,&tagStr );
             getTagParentsChildreansSublings(root , tagStr , 1) ;
 
         }
 
         if(choice == 5){
             printf("Enter Tag Name : ") ;
-            scanf( "%s" ,&tagStr );
+            //scanf( "%s" ,&tagStr );
             getTagParentsChildreansSublings(root , tagStr , 2) ;
         }
 
         if(choice == 6){
             printf("Enter Tag Name : ") ;
-            scanf( "%s" ,&tagStr );
+            //scanf( "%s" ,&tagStr );
             getTagParentsChildreansSublings(root , tagStr , 3) ;
         }
 
