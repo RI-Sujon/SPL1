@@ -34,7 +34,6 @@
 		<Unit filename="htmlPerser.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="ict.html" />
 		<Unit filename="library.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

@@ -11,8 +11,8 @@ char* findAll(struct Node *current,char *tag){
     int count_TagChar = 0 ,i;
 
     if(tag[0]=='['){
-        for(i=1 ; i<strlen(tag)+1 && tag[i]!=']' ; i++){
-            if(tag[i]==','||tag[i]=='\0'){
+        for(i=1 ; i<strlen(tag)+1 && tag[i-1]!=']' ; i++){
+            if(tag[i]==','||tag[i]==']'){
 
                 str_Tag[count_TagChar] = '\0';
                  printf("test:  %s\n",str_Tag) ;
