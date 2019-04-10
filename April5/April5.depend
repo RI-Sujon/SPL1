@@ -1,36 +1,19 @@
 # depslib dependency file v1.0
-1554592492 source:c:\users\aminul\desktop\april5\htmlperser.c
+1554924425 source:c:\users\rabiul islam sujon\desktop\spl1\april5\htmlperser.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<stdbool.h>
 	"library.h"
 
-1554592655 c:\users\aminul\desktop\april5\library.h
+1554923983 c:\users\rabiul islam sujon\desktop\spl1\april5\library.h
 
-1554592468 source:c:\users\aminul\desktop\april5\main.c
+1554924785 source:c:\users\rabiul islam sujon\desktop\spl1\april5\main.c
 	<stdio.h>
-	<stdlib.h>
-
-1554592195 source:c:\users\aminul\desktop\april5\treetraverse.c
-	"library.h"
-	<stdlib.h>
-
-1554863048 source:c:\users\aminul\desktop\newfolder\april5\htmlperser.c
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<stdbool.h>
-	"library.h"
-
-1554849327 c:\users\aminul\desktop\newfolder\april5\library.h
-
-1554849397 source:c:\users\aminul\desktop\newfolder\april5\treetraverse.c
 	<stdlib.h>
 	"library.h"
 
-1554849573 source:c:\users\aminul\desktop\newfolder\april5\main.c
-	<stdio.h>
+1554924743 source:c:\users\rabiul islam sujon\desktop\spl1\april5\treetraverse.c
 	<stdlib.h>
 	"library.h"
 

@@ -5,7 +5,7 @@
 int main()
 {
     struct Node *root = htmlPerser() ;
-    char *sujon = findAll(root,"[<font>,<br>,<img>]") ;
+    char *sujon = findAll(root,"<font>") ;
     printf("%s\n",sujon) ;
     return 0 ;
 }

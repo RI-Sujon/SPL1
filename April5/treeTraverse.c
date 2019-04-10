@@ -1,8 +1,8 @@
 #include<stdlib.h>
 #include"library.h"
 
-char fullTag[1000] ;
-int count = 0 ;
+char fullTag[10000] ;
+int fullTag_count = 0 ;
 char *emptyTagList1[] = {"<br>" , "<hr>" , "<img>" , "<input>" , "<link>" , "<meta>" , "<source>"} ;
 int flagForEmptyTag1 = 0 ;
 
@@ -48,11 +48,12 @@ char* findAll(struct Node *current,char *tag){
     }
 
     if(tag[i+1]==','){
-        printf("matha\n") ;
+        //printf("matha\n") ;
         for(i=i+2;i<strlen(tag)+1 ; i++){
             if(tag[i]==','|| tag[i]=='\0'){
                 str_Tag[count_TagChar] = '\0';
-                printf("attr:%s\n",str_Tag);
+
+                printf("%s\nattr:%s\n",fullTag,str_Tag);
                 findAll_checkAttr(str_Tag) ;
             }
 
@@ -61,7 +62,7 @@ char* findAll(struct Node *current,char *tag){
         }
     }
 
-    fullTag[count-2] = '\0' ;
+    fullTag[fullTag_count-2] = '\0' ;
     return fullTag;
 }
 
@@ -103,7 +104,9 @@ void findAll_checkAttr(char *attr){
                 start_fulltagForComma = i+1 ;
             }
         }
+
     }
+    printf("hattr:%s\n",helpAttr) ;
     memset(fullTag, 0, sizeof(fullTag));
     strcpy(fullTag,helpAttr) ;
 }
@@ -147,10 +150,10 @@ void findAll_byTag(struct Node *current,char tag[100]){
 
      if(flagforEquality==1){
         findAll_byTag_getFullTag(current) ;
-        fullTag[count] = ',' ;
-        count++ ;
-        fullTag[count] = '\n' ;
-        count++ ;
+        fullTag[fullTag_count] = ',' ;
+        fullTag_count++ ;
+        fullTag[fullTag_count] = '\n' ;
+        fullTag_count++ ;
      }
 
     for(i=0 ; i<10 ; i++){
@@ -167,13 +170,13 @@ void findAll_byTag_getFullTag(struct Node *current){
     int j , flag = -1;
 
     if((current->tag)[0]=='!'){
-        fullTag[count-1] = ' ' ;
+        fullTag[fullTag_count-1] = ' ' ;
         for(j=1 ; j<strlen(current->tag) ;j++){
-            fullTag[count] = (current->tag)[j] ;
-            count++ ;
+            fullTag[fullTag_count] = (current->tag)[j] ;
+            fullTag_count++ ;
         }
-        fullTag[count] = '>' ;
-        count++ ;
+        fullTag[fullTag_count] = '>' ;
+        fullTag_count++ ;
         flag = 0 ;
     }
 
@@ -183,8 +186,8 @@ void findAll_byTag_getFullTag(struct Node *current){
             flag = 1 ;
             continue ;
         }
-        fullTag[count] = (current->tag)[j] ;
-        count++ ;
+        fullTag[fullTag_count] = (current->tag)[j] ;
+        fullTag_count++ ;
     }
 
     int i ;
@@ -198,22 +201,22 @@ void findAll_byTag_getFullTag(struct Node *current){
     if((current->tag)[0]=='<'){
         int i ;
         for(i=0 ; i < 7 ; i++){
-            printf("%s\t%s\n",current->tag , emptyTagList1[i]) ;
+            //printf("%s\t%s\n",current->tag , emptyTagList1[i]) ;
             if(strcmp(current->tag , emptyTagList1[i])==0){
                 flagForEmptyTag1 = 1 ;
-                printf("matching:%s\t%s\n",current->tag , emptyTagList1[i]) ;
+                //printf("matching:%s\t%s\n",current->tag , emptyTagList1[i]) ;
             }
         }
 
         if(flagForEmptyTag1!=1){
-            fullTag[count] = '<' ;
-            count++ ;
-            fullTag[count] = '/' ;
-            count++ ;
+            fullTag[fullTag_count] = '<' ;
+            fullTag_count++ ;
+            fullTag[fullTag_count] = '/' ;
+            fullTag_count++ ;
             int k ;
             for(k=1 ; k<strlen(current->tag) ; k++){
-                fullTag[count] = (current->tag)[k] ;
-                count++ ;
+                fullTag[fullTag_count] = (current->tag)[k] ;
+                fullTag_count++ ;
             }
 
             flagForEmptyTag1 = 0 ;
