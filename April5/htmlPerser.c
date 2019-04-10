@@ -45,12 +45,12 @@ void inseartNode(struct Node *newNode , int flag){
 
 
 
-void operation(char *str){
-        printf("string:  %s\n" ,str);
+void operation(char str[1000]){
+        //printf("string:  %s\n" ,str);
     if(flagForEmptyTag == 1 && str[0] == '<'){
         flagForEmptyTag = 0 ;
         current = current->parent ;
-        printf("emptyTag: %s\n",current->tag) ;
+        //printf("emptyTag: %s\n",current->tag) ;
     }
 
         if(root==NULL){
@@ -86,7 +86,7 @@ void operation(char *str){
         struct node *newNode = createNode(str) ;
         inseartNode(newNode,flag) ;
 
-        printf("current:  %s\n" ,current->tag);
+        //printf("current:  %s\n" ,current->tag);
 }
 
 void createTreeControl(){
@@ -144,17 +144,15 @@ void createTreeControl(){
                 int i , j ,checkDoubleSignflag = 0 ;
 
                 if(str[0]==ch)checkDoubleSignflag = 1 ;
-                for(i=strlen(str) ; i > 0  && checkDoubleSignflag == 0; i--){
+                int sz = strlen(str) ;
+                for(i=sz ; i > 0  && checkDoubleSignflag == 0; i--){
                     str[i] = str[i-1] ;
                 }
                 str[0] = ch ;
-                str[strlen(str)] = '>' ;
-                str[strlen(str)+1] = '\0' ;
+                str[sz+1] = '>' ;
+                str[sz+2] = '\0' ;
 
                 flag = '0' ;
-
-
-
             }
 
             else{
@@ -179,6 +177,7 @@ void createTreeControl(){
                 s[s2]=str[i] ;
                 s2++ ;
                 s[s2]='\0' ;
+
                 if(str[i]==' ' || str[i+1]=='>')
                 {
 
@@ -203,6 +202,7 @@ void createTreeControl(){
                             hstr[cnt] = s[cnt] ;
                         }
                         hstr[cnt] = '\0' ;
+
                         operation(hstr) ;
 
                         memset(s, 0, sizeof(s));
@@ -213,13 +213,14 @@ void createTreeControl(){
 
                             char c1 = '!';
                             int k ;
+                            s[strlen(s)+1]='\0' ;
                             for(k=strlen(s) ; k > 0 ; k--){
                                 s[k] = s[k-1] ;
                             }
                             s[0] = c1 ;
 
-
                             char *hstr = (char*) malloc(100 + 1 ) ;
+
 
                             for(cnt = 0 ; cnt < strlen(s) ; cnt++ ){
                                 hstr[cnt] = s[cnt] ;
@@ -227,7 +228,6 @@ void createTreeControl(){
 
                             hstr[cnt] = '\0' ;
                             operation(hstr) ;
-
 
                         memset(s, 0, sizeof(s));
                         s2 = 0 ;
@@ -251,9 +251,7 @@ void createTreeControl(){
 struct Node* htmlPerser(){
     createLinkList() ;
     createTreeControl() ;
-
     outputTreePreOrder(root) ;
-    //menu(root) ;
     return root ;
 }
 
