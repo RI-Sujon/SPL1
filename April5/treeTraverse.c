@@ -66,6 +66,50 @@ char* findAll(struct Node *current,char *tag){
 }
 
 void findAll_checkAttr(char *attr){
+    int i ,count_str=0,start_fulltagForComma=0,flagForComma=-1,index_helpAttr=0;
+    char str[100],helpAttr[fullTag_count];
+    for(i=0 ; i<fullTag_count ; i++){
+        if(fullTag[i]==' '||fullTag[i]=='>'){
+            str[count_str]='\0' ;
+            //printf("checkAttr:%s\n",str) ;
+            if(strcmp(str,attr)==0){
+                printf("ok\n");
+                flagForComma = 1 ;
+
+            }
+
+            count_str=0 ;
+            memset(str, 0, sizeof(str));
+            continue ;
+
+        }
+
+        str[count_str]=fullTag[i] ;
+        count_str++ ;
+
+        if(fullTag[i]==','){
+            if(flagForComma==1){
+                int j ;
+                for(j=start_fulltagForComma ; j < i ; j++){
+                    helpAttr[index_helpAttr] = fullTag[j] ;
+                    index_helpAttr++ ;
+                }
+
+                helpAttr[index_helpAttr] = '\0' ;
+                flagForComma = -1 ;
+            }
+
+            else {
+                start_fulltagForComma = i+1 ;
+            }
+        }
+    }
+    memset(fullTag, 0, sizeof(fullTag));
+    strcpy(fullTag,helpAttr) ;
+}
+
+
+/*void findAll_checkAttr(char *attr){
     int i ,count_str=0;
     char str[100] ;
     for(i=0 ; i<count ; i++){
@@ -86,7 +130,7 @@ void findAll_checkAttr(char *attr){
         count_str++ ;
 
     }
-}
+}*/
 
 void findAll_byTag(struct Node *current,char tag[100]){
     int i , flagforEquality = 0 ;
