@@ -6,6 +6,9 @@
 
 struct Node *root , *current;
 
+char *emptyTagList[] = {"<br>" , "<hr>" , "<img>" , "<input>" , "<link>" , "<meta>" , "<source>"} ;
+int flagForEmptyTag = 0 ;
+
 void createLinkList(){
     root = NULL ;
     current = NULL ;
@@ -44,6 +47,12 @@ void inseartNode(struct Node *newNode , int flag){
 
 void operation(char *str){
         printf("string:  %s\n" ,str);
+    if(flagForEmptyTag == 1 && str[0] == '<'){
+        flagForEmptyTag = 0 ;
+        current = current->parent ;
+        printf("emptyTag: %s\n",current->tag) ;
+    }
+
         if(root==NULL){
             struct node *newNode = createNode(str) ;
             root = newNode ;
@@ -65,6 +74,15 @@ void operation(char *str){
         int flag ;
 
         if(str[0]=='<') flag = 1 ;
+
+        int i ;
+        for(i=0 ; i < 7 ; i++){
+            if(strcmp(str , emptyTagList[i])==0){
+                flagForEmptyTag = 1 ;
+            }
+
+        }
+
         struct node *newNode = createNode(str) ;
         inseartNode(newNode,flag) ;
 
@@ -238,3 +256,4 @@ struct Node* htmlPerser(){
     //menu(root) ;
     return root ;
 }
+
