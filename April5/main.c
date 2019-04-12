@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "library.h"
 
 int main()
 {
     struct Node *root = htmlPerser() ;
-    char *sujon = findAll(root,"<font>") ;
-    printf("%s\n",sujon) ;
+    char *sujon = findAll(root,"<font>,color=Red") ;
+    printf("%s",sujon) ;
     return 0 ;
 }
 

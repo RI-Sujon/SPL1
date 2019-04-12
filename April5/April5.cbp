@@ -34,6 +34,7 @@
 		<Unit filename="htmlPerser.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ict4.html" />
 		<Unit filename="library.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
@@ -45,7 +46,6 @@
 			<code_completion />
 			<envvars />
 			<debugger />
-			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

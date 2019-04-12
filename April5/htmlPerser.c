@@ -15,7 +15,6 @@ void createLinkList(){
 }
 
 struct Node* createNode(char *tag){
-
     struct Node *temp =  malloc(sizeof(struct Node));
 
     temp->tag = tag ;
@@ -43,54 +42,45 @@ void inseartNode(struct Node *newNode , int flag){
     }
 }
 
-
-
-void operation(char str[1000]){
-        //printf("string:  %s\n" ,str);
-    if(flagForEmptyTag == 1 && str[0] == '<'){
+void operation(char *str){
+    //printf("String:%s\n",str) ;
+    if(flagForEmptyTag == 1 &&  str[0] == '<'|| flagForEmptyTag == 1 && str[0] == '~'){
         flagForEmptyTag = 0 ;
         current = current->parent ;
-        //printf("emptyTag: %s\n",current->tag) ;
+         //printf("emptyTag: %s\n",current->tag) ;
+    }
+    if(root==NULL){
+        struct node *newNode = createNode(str) ;
+        root = newNode ;
+        current = newNode ;
+        return ;
     }
 
-        if(root==NULL){
-            struct node *newNode = createNode(str) ;
-            root = newNode ;
-            current = newNode ;
-
+    if(str[1]=='/'){
+        if(current->parent == NULL){
+            current = NULL ;
             return ;
         }
+        current = current->parent   ;
+        return ;
+    }
 
-        if(str[1]=='/'){
-            if(current->parent == NULL){
-                current = NULL ;
-                return ;
-            }
-            current = current->parent   ;
+    int flag ;
+    if(str[0]=='<') flag = 1 ;
 
-            return ;
+    int i ;
+    for(i=0 ; i < 7 ; i++){
+        if(strcmp(str , emptyTagList[i])==0){
+            flagForEmptyTag = 1 ;
         }
+    }
 
-        int flag ;
-
-        if(str[0]=='<') flag = 1 ;
-
-        int i ;
-        for(i=0 ; i < 7 ; i++){
-            if(strcmp(str , emptyTagList[i])==0){
-                flagForEmptyTag = 1 ;
-            }
-
-        }
-
-        struct node *newNode = createNode(str) ;
-        inseartNode(newNode,flag) ;
-
-        //printf("current:  %s\n" ,current->tag);
+    struct node *newNode = createNode(str) ;
+    inseartNode(newNode,flag) ;
+    //printf("current:  %s\n" ,current->tag);
 }
 
 void createTreeControl(){
-
     FILE *ioFile ;
     if ((ioFile = fopen("ict4.html","r")) == NULL){
        printf("Error! opening file");
@@ -144,13 +134,12 @@ void createTreeControl(){
                 int i , j ,checkDoubleSignflag = 0 ;
 
                 if(str[0]==ch)checkDoubleSignflag = 1 ;
-                int sz = strlen(str) ;
-                for(i=sz ; i > 0  && checkDoubleSignflag == 0; i--){
+                for(i=strlen(str) ; i > 0  && checkDoubleSignflag == 0; i--){
                     str[i] = str[i-1] ;
                 }
                 str[0] = ch ;
-                str[sz+1] = '>' ;
-                str[sz+2] = '\0' ;
+                str[strlen(str)] = '>' ;
+                str[strlen(str)+1] = '\0' ;
 
                 flag = '0' ;
             }
@@ -177,18 +166,16 @@ void createTreeControl(){
                 s[s2]=str[i] ;
                 s2++ ;
                 s[s2]='\0' ;
-
                 if(str[i]==' ' || str[i+1]=='>')
                 {
-
                     if(flagForTag == 0){
                         if(s[s2-1]==' '){
                             s[s2-1] = '>'  ;
                             s[s2] = '\0' ;
                         }
                         else {
-                                s[s2] = '>' ;
-                                s[s2+1] = '\0' ;
+                            s[s2] = '>' ;
+                            s[s2+1] = '\0' ;
                         }
 
                         flagForTag = 1 ;
@@ -202,7 +189,6 @@ void createTreeControl(){
                             hstr[cnt] = s[cnt] ;
                         }
                         hstr[cnt] = '\0' ;
-
                         operation(hstr) ;
 
                         memset(s, 0, sizeof(s));
@@ -210,25 +196,25 @@ void createTreeControl(){
                     }
 
                     else {
+                        char c1 = '!';
+                        int k ;
+                        for(k=strlen(s) ; k > 0 ; k--){
+                            s[k] = s[k-1] ;
+                        }
+                        s[0] = c1 ;
 
-                            char c1 = '!';
-                            int k ;
-                            s[strlen(s)+1]='\0' ;
-                            for(k=strlen(s) ; k > 0 ; k--){
-                                s[k] = s[k-1] ;
-                            }
-                            s[0] = c1 ;
+                        char *hstr = (char*) malloc(100 + 1 ) ;
 
-                            char *hstr = (char*) malloc(100 + 1 ) ;
+                        for(cnt = 0 ; cnt < strlen(s) ; cnt++ ){
+                            hstr[cnt] = s[cnt] ;
+                        }
 
+                        if(hstr[cnt-1] == ' '){
+                            hstr[cnt-1] = '\0' ;
+                        }
+                        else hstr[cnt] = '\0' ;
 
-                            for(cnt = 0 ; cnt < strlen(s) ; cnt++ ){
-                                hstr[cnt] = s[cnt] ;
-                            }
-
-                            hstr[cnt] = '\0' ;
-                            operation(hstr) ;
-
+                        operation(hstr) ;
                         memset(s, 0, sizeof(s));
                         s2 = 0 ;
                     }
@@ -237,12 +223,11 @@ void createTreeControl(){
 
             if(flag == '<') {
                 char *hstr = (char*) malloc(100 + 1 ) ;
-
-                        for(cnt = 0 ; cnt < strlen(str) ; cnt++ ){
-                            hstr[cnt] = str[cnt] ;
-                        }
-                        hstr[cnt] = '\0' ;
-                        operation(hstr) ;
+                for(cnt = 0 ; cnt < strlen(str) ; cnt++ ){
+                    hstr[cnt] = str[cnt] ;
+                }
+                hstr[cnt] = '\0' ;
+                operation(hstr) ;
             }
 
     }
@@ -251,7 +236,6 @@ void createTreeControl(){
 struct Node* htmlPerser(){
     createLinkList() ;
     createTreeControl() ;
-    outputTreePreOrder(root) ;
+    //outputTreePreOrder(root) ;
     return root ;
 }
-
