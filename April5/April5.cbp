@@ -31,6 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="GetPageFageFromWebsite.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="htmlPerser.c">
 			<Option compilerVar="CC" />
 		</Unit>

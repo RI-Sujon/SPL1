@@ -19,7 +19,7 @@ struct Node* createNode(char *tag){
 
     temp->tag = tag ;
     int i = 0 ;
-    for(i=0 ; i<10 ; i++){
+    for(i=0 ; i<1000 ; i++){
         temp->children[i] = NULL ;
     }
 
@@ -32,7 +32,7 @@ void inseartNode(struct Node *newNode , int flag){
 
     newNode->parent = current ;
     int i = 0 ;
-    for(i=0 ; i<10 ; i++){
+    for(i=0 ; i<1000 ; i++){
         if(current->children[i]==NULL)
         {
             current->children[i] = newNode ;
@@ -47,7 +47,6 @@ void operation(char *str){
     if(flagForEmptyTag == 1 &&  str[0] == '<'|| flagForEmptyTag == 1 && str[0] == '~'){
         flagForEmptyTag = 0 ;
         current = current->parent ;
-         //printf("emptyTag: %s\n",current->tag) ;
     }
     if(root==NULL){
         struct node *newNode = createNode(str) ;
@@ -57,15 +56,17 @@ void operation(char *str){
     }
 
     if(str[1]=='/'){
+
         if(current->parent == NULL){
             current = NULL ;
             return ;
         }
         current = current->parent   ;
+
         return ;
     }
 
-    int flag ;
+    int flag = 0 ;
     if(str[0]=='<') flag = 1 ;
 
     int i ;
@@ -74,10 +75,10 @@ void operation(char *str){
             flagForEmptyTag = 1 ;
         }
     }
-
+    //printf("Pre Current:\t\t%s\n" ,current->tag);
     struct node *newNode = createNode(str) ;
     inseartNode(newNode,flag) ;
-    //printf("current:  %s\n" ,current->tag);
+    //printf("Post Current:\t\t%s\n" ,current->tag);
 }
 
 void createTreeControl(){
@@ -87,30 +88,47 @@ void createTreeControl(){
        exit(1);
     }
 
-    char str[1000] ;
+    char str[20000] ;
     char ch,flag='0' ;
-    int s1 = 0 ;
+    int s1 = 0 ,flagForHtmlAttr = -1,cnt ; ;
 
-        fscanf(ioFile,"%c",&ch) ; //read '<' from html page
+    fscanf(ioFile,"%c",&ch) ; //read '<' from html page
 
-        while(ch!='>'){           //read first tag from html page
+    while(ch!='>'){
+
+        while(ch!='>'&&ch!=' '){           //read first tag from html page
             str[s1] = ch ;
             s1++ ;
             fscanf(ioFile,"%c",&ch) ;
+
         }
 
-        str[s1] = ch ;
-        str[s1+1] = '\0' ;
+        if(flagForHtmlAttr==-1){
+            str[s1] = '>' ;
+            str[s1+1] = '\0' ;
+        }
+        else str[s1] = '\0' ;
+
         char *hstr = (char*) malloc(100 + 1 ) ;
-        int cnt ;
+
         for(cnt = 0 ; cnt < strlen(str) ; cnt++ ){
             hstr[cnt] = str[cnt] ;
         }
         hstr[cnt] = '\0' ;
         operation(hstr) ;
 
-        char endstring[] ="<1html>" ;
+        if(ch==' '){
+            flagForHtmlAttr = 1 ;
+            fscanf(ioFile,"%c",&ch) ;
+            s1 = 0 ;
+            memset(str, 0, sizeof(str));
+            str[s1]='!' ;
+            s1++ ;
+        }
+     }
 
+
+        char endstring[] ="<1html>" ;
 
         while(strcmp(endstring ,"</html>")){
             if(flag == '0'){
@@ -119,7 +137,6 @@ void createTreeControl(){
                     fscanf(ioFile,"%c",&ch) ;
                 }
                 if(ch=='\n' || ch ==' ' || ch == '\t') continue ;
-
             }
             else ch = flag ;
 
@@ -234,6 +251,7 @@ void createTreeControl(){
 }
 
 struct Node* htmlPerser(){
+    //getHtmlPage() ;
     createLinkList() ;
     createTreeControl() ;
     //outputTreePreOrder(root) ;
