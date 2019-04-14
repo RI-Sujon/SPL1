@@ -4,7 +4,7 @@
 int main()
 {
     struct Node *root = htmlPerser() ;
-    char *sujon = findAll(root,"href=true") ;
+    char *sujon = find(root,"[<h1>,<font>]") ;
     printf("%s",sujon) ;
     return 0 ;
 }

@@ -6,12 +6,13 @@ int fullTag_count = 0 ;
 char *emptyTagList1[] = {"<br>" , "<hr>" , "<img>" , "<input>" , "<link>" , "<meta>" , "<source>"} ;
 int flagForEmptyTag1 = 0 ;
 
-char* findAll(struct Node *current,char *tag){
+int findTagLimit = 0 ;
+
+char* findAllTag(struct Node *current,char *tag){
     char str_Tag[100] ;
     int count_TagChar = 0 ,i;
 
     if(strcmp(tag,"true")==0){
-
         findAll_byTagOrAttrString_getFullTag(current) ;
         fullTag[fullTag_count] = ',' ;
         fullTag_count++ ;
@@ -158,7 +159,6 @@ void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
 
     int i , flagforEquality = 0 ;
     char *strr = current->tag ;
-
     if(flag==1){
         for(i=0 ; i<strlen(strr)&&strr[i]!='=' ; i++){
             flagforEquality = 1 ;
@@ -169,20 +169,38 @@ void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
         }
 
         if(flagforEquality==1){
-            findAll_byTagOrAttrString_getFullTag(current->parent) ;
-            fullTag[fullTag_count] = ',' ;
-            fullTag_count++ ;
-            fullTag[fullTag_count] = '\n' ;
-            fullTag_count++ ;
+            if(findTagLimit==1 || findTagLimit==0){
+                //printf("limit:%d\n",findTagLimit) ;
+                findAll_byTagOrAttrString_getFullTag(current->parent) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagLimit==1){
+                    findTagLimit = -1 ;
+                    return ;
+                }
+            }
         }
     }
 
     else if(strcmp(strr,AttrString)==0 && flag!=1){
-        findAll_byTagOrAttrString_getFullTag(current->parent) ;
-        fullTag[fullTag_count] = ',' ;
-        fullTag_count++ ;
-        fullTag[fullTag_count] = '\n' ;
-        fullTag_count++ ;
+        if(findTagLimit==1 || findTagLimit==0){
+                //printf("limit:%d\n",findTagLimit) ;
+                findAll_byTagOrAttrString_getFullTag(current->parent) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagLimit==1){
+                    findTagLimit = -1 ;
+                    return ;
+                }
+            }
      }
 
     for(i=0 ; i<1000 ; i++){
@@ -268,11 +286,20 @@ void findAll_byTag(struct Node *current,char tag[100]){
 
     if(flagforEquality==1){
 
-        findAll_byTagOrAttrString_getFullTag(current) ;
-        fullTag[fullTag_count] = ',' ;
-        fullTag_count++ ;
-        fullTag[fullTag_count] = '\n' ;
-        fullTag_count++ ;
+        if(findTagLimit==1 || findTagLimit==0) {
+                findAll_byTagOrAttrString_getFullTag(current) ;
+                //printf("limit:%d\n",findTagLimit) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagLimit==1){
+                    findTagLimit = -1 ;
+                    return ;
+                }
+        }
      }
 
     for(i=0 ; i<1000 ; i++){
@@ -354,4 +381,26 @@ void outputTreePreOrder(struct Node *parent)
         }
         else break ;
     }
+}
+
+
+char* findAll(struct Node *current,char *tag){
+    char *sujon= findAllTag(current,tag) ;
+    int i ;
+    for(i=fullTag_count-2 ; i>0 ; i--){
+        fullTag[i] = fullTag[i-1] ;
+    }
+
+    fullTag[0] = '[' ;
+    fullTag[fullTag_count-1] = ']' ;
+    fullTag[fullTag_count] = '\0' ;
+
+    return sujon ;
+}
+
+char* find(struct Node *current,char *tag){
+    findTagLimit = 1 ;
+    char *sujon= findAllTag(current,tag) ;
+
+    return sujon ;
 }
