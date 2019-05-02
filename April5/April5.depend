@@ -1,22 +1,26 @@
 # depslib dependency file v1.0
-1555166029 source:c:\users\rabiul islam sujon\desktop\spl1\april5\htmlperser.c
+1556697678 source:c:\users\rabiul islam sujon\desktop\spl1\april5\getpagefagefromwebsite.c
+	<stdio.h>
+	<winsock2.h>
+
+1556817096 source:c:\users\rabiul islam sujon\desktop\spl1\april5\htmlperser.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<stdbool.h>
 	"library.h"
 
-1555135539 c:\users\rabiul islam sujon\desktop\spl1\april5\library.h
+1556697693 c:\users\rabiul islam sujon\desktop\spl1\april5\library.h
 
-1555258418 source:c:\users\rabiul islam sujon\desktop\spl1\april5\main.c
+1556828319 source:c:\users\rabiul islam sujon\desktop\spl1\april5\main.c
 	<stdio.h>
 	<stdlib.h>
 
-1555258407 source:c:\users\rabiul islam sujon\desktop\spl1\april5\treetraverse.c
+1556817026 source:c:\users\rabiul islam sujon\desktop\spl1\april5\treetraverse.c
 	<stdlib.h>
 	"library.h"
 
-1555146272 source:c:\users\rabiul islam sujon\desktop\spl1\april5\getpagefagefromwebsite.c
-	<stdio.h>
-	<winsock2.h>
+1556828458 source:c:\users\rabiul islam sujon\desktop\spl1\april5\treenavigate.c
+	<stdlib.h>
+	"library.h"
 

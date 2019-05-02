@@ -6,13 +6,45 @@ int fullTag_count = 0 ;
 char *emptyTagList1[] = {"<br>" , "<hr>" , "<img>" , "<input>" , "<link>" , "<meta>" , "<source>"} ;
 int flagForEmptyTag1 = 0 ;
 
-int findTagLimit = 0 ;
+int findTagFlag = 0,cssIdentifyFlag = -1  ;
 
-char* findAllTag(struct Node *current,char *tag){
+char* findAllTag(struct Node *current,char *tag)
+{
     char str_Tag[100] ;
     int count_TagChar = 0 ,i;
 
-    if(strcmp(tag,"true")==0){
+    int pn ;
+    char strTagForCheckingString[100] ;
+    for(pn=0 ; pn<strlen(tag) ; pn++){
+        if(tag[pn]=='='){
+            if(strcmp(strTagForCheckingString,"string")==0){
+                char strTagforString[100] ;
+                int qn ;
+                for(qn=0 ; qn+3+pn<strlen(tag) ; qn++){
+                    strTagforString[qn] = tag[pn+2+qn] ;
+                }
+                strTagforString[qn] = '\0';
+
+                char c = '~';
+                int i ;
+                for(i=strlen(strTagforString) ; i >= 1 ; i--){
+                    strTagforString[i] = strTagforString[i-1] ;
+                }
+                strTagforString[0] = c ;
+                strTagforString[strlen(strTagforString)+1] = '\0';
+                //printf("matha2:%sEND\n",strTagforString) ;
+
+                findAllTag_byString(current,strTagforString) ;
+
+                fullTag[fullTag_count-2] = '\0' ;
+                return fullTag;
+            }
+        }
+        strTagForCheckingString[pn] = tag[pn] ;
+    }
+
+    if(strcmp(tag,"true")==0)
+    {
         findAll_byTagOrAttrString_getFullTag(current) ;
         fullTag[fullTag_count] = ',' ;
         fullTag_count++ ;
@@ -20,10 +52,11 @@ char* findAllTag(struct Node *current,char *tag){
         fullTag_count++ ;
     }
 
-    if(tag[0]=='['){                                        //find with a set of tag
+    if(tag[0]=='[')                                       //find with a set of tag
+    {
         for(i=1 ; i<strlen(tag)+1 && tag[i-1]!=']' ; i++){
-            if(tag[i]==','||tag[i]==']'){
-
+            if(tag[i]==','||tag[i]==']')
+            {
                 str_Tag[count_TagChar] = '\0';
                 //printf("test 1:  %s\n",str_Tag) ;
                 findAll_byTag(current,str_Tag) ;
@@ -37,8 +70,10 @@ char* findAllTag(struct Node *current,char *tag){
         }
     }
 
-    else if(tag[0]=='<'){                                   //find with a single tag
-        for(i=0 ; i<strlen(tag) ; i++){
+    else if(tag[0]=='<')                              //find with a single tag
+    {
+        for(i=0 ; i<strlen(tag) ; i++)
+        {
             str_Tag[count_TagChar] = tag[i];
             count_TagChar++ ;
 
@@ -58,12 +93,15 @@ char* findAllTag(struct Node *current,char *tag){
         count_TagChar++ ;
         char trueStr[5] ;
         int flagForTrueSign = -1,count_ForTrue = 0 ;
-        for(i=0 ; i<strlen(tag) && count_ForTrue<4 ; i++){
-            if(tag[i-1]=='='){
+        for(i=0 ; i<strlen(tag) && count_ForTrue<4 ; i++)
+        {
+            if(tag[i-1]=='=')
+            {
                 flagForTrueSign = 1 ;
             }
 
-            if(flagForTrueSign==1){
+            if(flagForTrueSign==1)
+            {
                 trueStr[count_ForTrue] = tag[i] ;
                 count_ForTrue++ ;
             }
@@ -71,10 +109,13 @@ char* findAllTag(struct Node *current,char *tag){
         trueStr[count_ForTrue] = '\0' ;
         //printf("%s\n",trueStr) ;
 
-        for(i=0 ; i<strlen(tag)+1 && tag[i-1]!=','; i++){
-            if(strcmp(trueStr,"true")==0 && tag[i]=='='){
+        for(i=0 ; i<strlen(tag)+1 && tag[i-1]!=','; i++)
+        {
+            if(strcmp(trueStr,"true")==0 && tag[i]=='=')
+            {
                 str_Tag[count_TagChar] = '\0';
-                for( ; tag[i]!=','&& tag[i]!='\0' ; i++ ){
+                for( ; tag[i]!=','&& tag[i]!='\0' ; i++ )
+                {
                     //printf("attr1:%s\n",str_Tag);
                 }
                 findAll_byAttrString(current,str_Tag,1) ;
@@ -83,7 +124,8 @@ char* findAllTag(struct Node *current,char *tag){
                 break ;
             }
 
-            else if(tag[i]==','||tag[i]=='\0'){
+            else if(tag[i]==','||tag[i]=='\0')
+            {
                 str_Tag[count_TagChar] = '\0';
                 //printf("test 1:  %s\n",str_Tag) ;
                 findAll_byAttrString(current,str_Tag,-1) ;
@@ -97,23 +139,30 @@ char* findAllTag(struct Node *current,char *tag){
         }
     }
 
-    if(tag[i+1]==','||tag[i]==','){                         //filter with attribute
-        if(tag[i]==','){
+    if(tag[i+1]==','||tag[i]==',')                            //filter with attribute
+    {
+        if(tag[i]==',')
+        {
             i=i-1;
         }
 
         int flagForCheckTrueBeforeComma = -1 ;
         char trueStr[5] ;
 
-        for(i=i+2;i<strlen(tag)+1 ; i++){                  //true attribute
-            if(flagForCheckTrueBeforeComma==-1){
+        for(i=i+2;i<strlen(tag)+1 ; i++)                        //true attribute
+        {
+            if(flagForCheckTrueBeforeComma==-1)
+            {
                 int flagForTrueSign = -1,count_ForTrue = 0 ,j=0;
-                for(j=i ; j<strlen(tag)&&count_ForTrue<4 ; j++){
-                    if(tag[j-1]=='='){
+                for(j=i ; j<strlen(tag)&&count_ForTrue<4 ; j++)
+                {
+                    if(tag[j-1]=='=')
+                    {
                         flagForTrueSign = 1 ;
                     }
 
-                    if(flagForTrueSign==1){
+                    if(flagForTrueSign==1)
+                    {
                         trueStr[count_ForTrue] = tag[j] ;
                         count_ForTrue++ ;
                     }
@@ -124,9 +173,11 @@ char* findAllTag(struct Node *current,char *tag){
             }
 
 
-            if(strcmp(trueStr,"true")==0 && tag[i]=='='){
+            if(strcmp(trueStr,"true")==0 && tag[i]=='=')
+            {
                 str_Tag[count_TagChar] = '\0';
-                for( ; tag[i]!=','&& tag[i]!='\0' ; i++ ){
+                for( ; tag[i]!=','&& tag[i]!='\0' ; i++ )
+                {
                     //printf("attr1:%s\n",str_Tag);
                 }
                 //printf("attr1:%s\n",str_Tag);
@@ -137,7 +188,8 @@ char* findAllTag(struct Node *current,char *tag){
                 continue ;
             }
 
-            else if(tag[i]==','|| tag[i]=='\0'){            //normal Attribute
+            else if(tag[i]==','|| tag[i]=='\0')                   //normal Attribute
+            {
                 str_Tag[count_TagChar] = '\0';
                 //printf("attr2:%s\n",str_Tag);
                 findAll_checkAttr(str_Tag,-1) ;
@@ -155,22 +207,26 @@ char* findAllTag(struct Node *current,char *tag){
     return fullTag;
 }
 
-void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
-
+void findAll_byAttrString(struct Node *current,char *AttrString,int flag)
+{
     int i , flagforEquality = 0 ;
     char *strr = current->tag ;
     if(flag==1){
-        for(i=0 ; i<strlen(strr)&&strr[i]!='=' ; i++){
+        for(i=0 ; i<strlen(strr)&&strr[i]!='=' ; i++)
+        {
             flagforEquality = 1 ;
-            if(strr[i]!=AttrString[i]) {
+            if(strr[i]!=AttrString[i])
+            {
                 flagforEquality = -1 ;
                 break ;
             }
         }
 
-        if(flagforEquality==1){
-            if(findTagLimit==1 || findTagLimit==0){
-                //printf("limit:%d\n",findTagLimit) ;
+        if(flagforEquality==1)
+        {
+            if(findTagFlag==1 || findTagFlag==0)
+            {
+                //printf("limit:%d\n",findTagFlag) ;
                 findAll_byTagOrAttrString_getFullTag(current->parent) ;
 
                 fullTag[fullTag_count] = ',' ;
@@ -178,17 +234,19 @@ void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
                 fullTag[fullTag_count] = '\n' ;
                 fullTag_count++ ;
 
-                if(findTagLimit==1){
-                    findTagLimit = -1 ;
+                if(findTagFlag==1){
+                    findTagFlag = -1 ;
                     return ;
                 }
             }
         }
     }
 
-    else if(strcmp(strr,AttrString)==0 && flag!=1){
-        if(findTagLimit==1 || findTagLimit==0){
-                //printf("limit:%d\n",findTagLimit) ;
+    else if(strcmp(strr,AttrString)==0 && flag!=1)
+    {
+        if(findTagFlag==1 || findTagFlag==0)
+        {
+                //printf("limit:%d\n",findTagFlag) ;
                 findAll_byTagOrAttrString_getFullTag(current->parent) ;
 
                 fullTag[fullTag_count] = ',' ;
@@ -196,14 +254,14 @@ void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
                 fullTag[fullTag_count] = '\n' ;
                 fullTag_count++ ;
 
-                if(findTagLimit==1){
-                    findTagLimit = -1 ;
+                if(findTagFlag==1){
+                    findTagFlag = -1 ;
                     return ;
                 }
             }
-     }
-
-    for(i=0 ; i<1000 ; i++){
+    }
+    for(i=0 ; i<1000 ; i++)
+    {
         if((current->children[i])!=NULL)
         {
             findAll_byAttrString(current->children[i] ,AttrString ,flag ) ;
@@ -212,16 +270,20 @@ void findAll_byAttrString(struct Node *current,char *AttrString,int flag){
     }
 }
 
-void findAll_checkAttr(char *attr,int flag){
+void findAll_checkAttr(char *attr,int flag)
+{
     int i,j ,count_str=0,start_fulltagForComma=0,flagForComma=-1,index_helpAttr=0,flagforEquality=-1;
     char str[100],helpAttr[fullTag_count];
     for(i=0 ; i<fullTag_count ; i++){
-        if(fullTag[i]==' '||fullTag[i]=='>'){
+        if(fullTag[i]==' '||fullTag[i]=='>')
+        {
             str[count_str]='\0' ;
             //printf("checkAttr:%s\n",str) ;
             //printf("ok\n");
-            if(flag==1){
-                for(j=0 ; j<strlen(str)&&str[j]!='=' ; j++){
+            if(flag==1)
+            {
+                for(j=0 ; j<strlen(str)&&str[j]!='=' ; j++)
+                {
                     flagforEquality = 1 ;
                     if(str[j]!=attr[j]) {
                         flagforEquality = -1 ;
@@ -229,12 +291,14 @@ void findAll_checkAttr(char *attr,int flag){
                     }
                 }
 
-                if(flagforEquality==1){
+                if(flagforEquality==1)
+                {
                     flagForComma = 1 ;
                 }
             }
 
-            else if(strcmp(str,attr)==0){
+            else if(strcmp(str,attr)==0)
+            {
                 //printf("ok\n");
                 flagForComma = 1 ;
             }
@@ -247,10 +311,13 @@ void findAll_checkAttr(char *attr,int flag){
         str[count_str]=fullTag[i] ;
         count_str++ ;
         //printf("ddd:%s\n",helpAttr) ;
-        if(fullTag[i]==','){
-            if(flagForComma==1){
+        if(fullTag[i]==',')
+        {
+            if(flagForComma==1)
+            {
                 int j ;
-                for(j=start_fulltagForComma ; j <= i ; j++){
+                for(j=start_fulltagForComma ; j <= i ; j++)
+                {
                     helpAttr[index_helpAttr] = fullTag[j] ;
                     index_helpAttr++ ;
                 }
@@ -272,37 +339,43 @@ void findAll_checkAttr(char *attr,int flag){
     //printf("flltag5:%s\n",fullTag) ;
 }
 
-void findAll_byTag(struct Node *current,char tag[100]){
+void findAll_byTag(struct Node *current,char tag[100])
+{
     int i , flagforEquality = 0 ;
     char *strr = current->tag ;
 
-    for(i=0 ; i<strlen(strr)&&strlen(strr)==strlen(tag) ; i++){
+    for(i=0 ; i<strlen(strr)&&strlen(strr)==strlen(tag) ; i++)
+    {
             flagforEquality = 1 ;
-            if(strr[i]!=tag[i]) {
+            if(strr[i]!=tag[i])
+            {
                 flagforEquality = -1 ;
                 break ;
             }
     }
 
-    if(flagforEquality==1){
-
-        if(findTagLimit==1 || findTagLimit==0) {
+    if(flagforEquality==1)
+    {
+        if(findTagFlag==1 || findTagFlag==0)
+        {
                 findAll_byTagOrAttrString_getFullTag(current) ;
-                //printf("limit:%d\n",findTagLimit) ;
+                //printf("limit:%d\n",findTagFlag) ;
 
                 fullTag[fullTag_count] = ',' ;
                 fullTag_count++ ;
                 fullTag[fullTag_count] = '\n' ;
                 fullTag_count++ ;
 
-                if(findTagLimit==1){
-                    findTagLimit = -1 ;
+                if(findTagFlag==1)
+                {
+                    findTagFlag = -1 ;
                     return ;
                 }
         }
      }
 
-    for(i=0 ; i<1000 ; i++){
+    for(i=0 ; i<1000 ; i++)
+    {
         if((current->children[i])!=NULL)
         {
             findAll_byTag(current->children[i] ,tag ) ;
@@ -311,12 +384,14 @@ void findAll_byTag(struct Node *current,char tag[100]){
     }
 }
 
-void findAll_byTagOrAttrString_getFullTag(struct Node *current){
+void findAll_byTagOrAttrString_getFullTag(struct Node *current)
+{
     int j , flag = -1;
 
     if((current->tag)[0]=='!'){
         fullTag[fullTag_count-1] = ' ' ;
-        for(j=1 ; j<strlen(current->tag) ;j++){
+        for(j=1 ; j<strlen(current->tag) ;j++)
+        {
             fullTag[fullTag_count] = (current->tag)[j] ;
             fullTag_count++ ;
         }
@@ -325,18 +400,61 @@ void findAll_byTagOrAttrString_getFullTag(struct Node *current){
         flag = 0 ;
     }
 
-    for(j=0 ; j<strlen(current->tag) && flag!=0 ; j++){
+    //cssIdentifyFlag = -1 ;
 
-        if((current->tag)[0]=='~' && flag!=1){
+    for(j=0 ; j<strlen(current->tag) && flag!=0 ; j++)
+    {
+        if((current->tag)[0]=='~' && flag!=1)
+        {
             flag = 1 ;
             continue ;
         }
+        else if((current->tag)[0]=='^' && flag!=1)
+        {
+            flag = 1 ;
+            if(cssIdentifyFlag==3)
+            {
+                fullTag[fullTag_count-1] = '}' ;
+            }
+            cssIdentifyFlag = 1 ;
+            continue ;
+        }
+        else if((current->tag)[0]=='=' && flag!=1)
+        {
+            flag = 1 ;
+            cssIdentifyFlag = 2 ;
+            continue ;
+        }
+        else if((current->tag)[0]=='%' && flag!=1)
+        {
+            flag = 1 ;
+            cssIdentifyFlag = 3 ;
+            continue ;
+        }
+
         fullTag[fullTag_count] = (current->tag)[j] ;
+        fullTag_count++ ;
+    }
+
+    if(cssIdentifyFlag==1)
+    {
+        fullTag[fullTag_count] = '{' ;
+        fullTag_count++ ;
+    }
+    else if(cssIdentifyFlag==2)
+    {
+        fullTag[fullTag_count] = ':' ;
+        fullTag_count++ ;
+    }
+    else if(cssIdentifyFlag==3)
+    {
+        fullTag[fullTag_count] = ';' ;
         fullTag_count++ ;
     }
     //  printf("Get Tag:%s\n\n",current->tag) ;
     int i ;
-    for(i=0 ; i<1000 ; i++){
+    for(i=0 ; i<1000 ; i++)
+    {
         if((current->children[i])!=NULL)
         {
             findAll_byTagOrAttrString_getFullTag(current->children[i]) ;
@@ -344,17 +462,26 @@ void findAll_byTagOrAttrString_getFullTag(struct Node *current){
         else break ;
     }
 
-    if((current->tag)[0]=='<'){
+    if((current->tag)[0]=='<')
+    {
         int i ;
-        for(i=0 ; i < 7 ; i++){
+        for(i=0 ; i < 7 ; i++)
+        {
             //printf("%s\t%s\n",current->tag , emptyTagList1[i]) ;
-            if(strcmp(current->tag , emptyTagList1[i])==0){
+            if(strcmp(current->tag , emptyTagList1[i])==0)
+            {
                 flagForEmptyTag1 = 1 ;
                 //printf("matching:%s\t%s\n",current->tag , emptyTagList1[i]) ;
             }
         }
 
-        if(flagForEmptyTag1!=1){
+        if(flagForEmptyTag1!=1)
+        {
+            if(cssIdentifyFlag==3 && flag!=1)
+            {
+                fullTag[fullTag_count-1] = '}' ;
+                cssIdentifyFlag=-1 ;
+            }
             fullTag[fullTag_count] = '<' ;
             fullTag_count++ ;
             fullTag[fullTag_count] = '/' ;
@@ -369,11 +496,76 @@ void findAll_byTagOrAttrString_getFullTag(struct Node *current){
      }
 }
 
+
+void findAllTag_byString(struct Node *current,char stringTag[100],int flag)
+{
+    int i , flagforEquality = 0 ;
+    char *strr = current->tag ;
+    if(flag==1){
+        for(i=0 ; i<strlen(strr)&&strr[i]!='=' ; i++)
+        {
+            flagforEquality = 1 ;
+            if(strr[i]!=stringTag[i])
+            {
+                flagforEquality = -1 ;
+                break ;
+            }
+        }
+
+        if(flagforEquality==1)
+        {
+            if(findTagFlag==1 || findTagFlag==0)
+            {
+                //printf("limit:%d\n",findTagFlag) ;
+                findAll_byTagOrAttrString_getFullTag(current->parent) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagFlag==1){
+                    findTagFlag = -1 ;
+                    return ;
+                }
+            }
+        }
+    }
+
+    else if(strcmp(strr,stringTag)==0 && flag!=1)
+    {
+        if(findTagFlag==1 || findTagFlag==0)
+        {
+                //printf("limit:%d\n",findTagFlag) ;
+                findAll_byTagOrAttrString_getFullTag(current->parent) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagFlag==1){
+                    findTagFlag = -1 ;
+                    return ;
+                }
+            }
+    }
+    for(i=0 ; i<1000 ; i++)
+    {
+        if((current->children[i])!=NULL)
+        {
+            findAll_byAttrString(current->children[i] ,stringTag ,flag ) ;
+        }
+        else break ;
+    }
+}
+
 void outputTreePreOrder(struct Node *parent)
 {
     printf("%s\n",parent->tag) ;
     int i ;
-    for(i=0 ; i<1000 ; i++){
+    for(i=0 ; i<1000 ; i++)
+    {
 
         if((parent->children[i])!=NULL)
         {
@@ -383,11 +575,12 @@ void outputTreePreOrder(struct Node *parent)
     }
 }
 
-
-char* findAll(struct Node *current,char *tag){
+char* find_all(struct Node *current,char *tag)
+{
     char *sujon= findAllTag(current,tag) ;
     int i ;
-    for(i=fullTag_count-2 ; i>0 ; i--){
+    for(i=fullTag_count-2 ; i>0 ; i--)
+    {
         fullTag[i] = fullTag[i-1] ;
     }
 
@@ -398,8 +591,17 @@ char* findAll(struct Node *current,char *tag){
     return sujon ;
 }
 
-char* find(struct Node *current,char *tag){
-    findTagLimit = 1 ;
+char* find(struct Node *current,char *tag)
+{
+    findTagFlag = 1 ;
+    char *sujon= findAllTag(current,tag) ;
+
+    return sujon ;
+}
+
+char* find_Parents(struct Node *current,char *tag)
+{
+    findTagFlag = 11 ;
     char *sujon= findAllTag(current,tag) ;
 
     return sujon ;

@@ -67,8 +67,10 @@ void getHtmlPage(int argc , char *argv[])
     printf("sss: %d\n" ,recv_size) ;
 
     int j ,flag = 0;
-    for(j=0 ; j<recv_size ; j++){
-        if(server_reply[j]!='<' && flag==0){
+    for(j=0 ; j<recv_size ; j++)
+    {
+        if(server_reply[j]!='<' && flag==0)
+        {
             continue ;
         }
         else flag = 1 ;

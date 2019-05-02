@@ -1,4 +1,5 @@
-struct Node{
+struct Node
+{
     char *tag ;
     struct Node *parent,*children[1000] ;
 };
