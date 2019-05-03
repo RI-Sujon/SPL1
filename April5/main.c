@@ -1,29 +1,32 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 int main()
 {
     struct Node *root = htmlPerser() ;
 
-    char *sujon = find(root,"<h1>") ;
+    char *sujon = find(root,"<p>") ;
     printf("FullTag:%s\n",sujon) ;
 
-    char *tag = getTagName(sujon) ;
+    char *str = findPreviousSublings(root,sujon) ;
+    printf("tag Name:%s\n",str) ;
+
+    /*char *tag = getTagName(sujon) ;
     printf("tag Name:%s\n",tag) ;
 
-    char *contents = getTagContents(sujon) ;
-    printf("tag Contents:%s\n",contents) ;
+    char *children = getTagChildren(sujon) ;
+    printf("%s tag Contents:%s\n",tag,children) ;
 
-    char *cont = getTagContents(contents) ;
-    printf("tag Contents:%s\n",cont) ;
-
-
-
-    /*char **tag = getAllTagName(sujon) ;
-
+    char **contents = getTagContents(sujon) ;
     int i ;
+    for(i=0 ; i<sizeOfTagContainsList(sujon) ;i++){
+        printf("Contents:%s\n",contents[i]) ;
+    }
+
+    char **tagList = getAllTagName(sujon) ;
+
+
     for(i=0 ; i<sizeOfTagList(sujon) ;i++){
-        printf("Tag:%s\n",tag[i]) ;
+        printf("Tag:%s\n",tagList[i]) ;
     }
 
     char **str = getAllTagString(sujon) ;

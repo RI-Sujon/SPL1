@@ -4,7 +4,7 @@
 char* getTagName(char tagStr[1000])
 {
     int in ;
-    char stringResult[1000] ;
+    char *stringResult = (char*) malloc(1000);
     int jn ;
     for(jn=0 ; jn<strlen(tagStr) ; jn++)
     {
@@ -78,7 +78,7 @@ char** getAllTagName(char tagStr[1000])
 char* getTagString(char tagStr[1000])
 {
     int in ;
-    char stringResult[1000] ;
+    char *stringResult=(char*) malloc(100 + 1 ) ;
     for(in=0 ; in<strlen(tagStr) ; in++)
     {
         if(tagStr[in]=='>')
@@ -149,10 +149,10 @@ char** getAllTagString(char tagStr[1000])
     return stringResult ;
 }
 
-char* getTagContents(char tagStr[1000])
+char* getTagChildren(char tagStr[1000])
 {
     int in ,countFlag=1;
-    char stringResult[1000] ;
+    char *stringResult=(char*) malloc(1000 );
     for(in=0 ; in<strlen(tagStr) ; in++)
     {
         if(tagStr[in]=='>')
@@ -169,11 +169,18 @@ char* getTagContents(char tagStr[1000])
                 {
                     countFlag++ ;
                 }
+                //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
 
-                if(tagStr[in+1+jn]=='<' && countFlag==0 )
+                if(tagStr[in+1+jn]=='<' && countFlag==1 )
                 {
-                    //printf("Stringssssssssssssssssssss:%s\t%d\n",stringResult,countFlag) ;
-                    stringResult[jn] = '\0' ;
+                    //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
+                    int mn ;
+                    for(mn=0 ; tagStr[in+1+jn+mn]!='>' ;mn++ )
+                    {
+                        stringResult[jn+mn] = tagStr[in+1+jn+mn] ;
+                    }
+                    stringResult[jn+mn] = tagStr[in+1+jn+mn] ;
+                    stringResult[jn+mn+1] = '\0' ;
                     return stringResult ;
                 }
                 stringResult[jn] = tagStr[in+1+jn] ;
@@ -181,6 +188,110 @@ char* getTagContents(char tagStr[1000])
         }
     }
 
+}
+
+char** getTagContents(char tagStr[1000])
+{
+    char** stringResult = malloc(100 * sizeof(char*));
+    int i , kn=0 , flagForNextContents = 0 ,localflag = 0 ;
+    for (i =0 ; i < 100; ++i)
+    {
+        stringResult[i] = malloc(1000 * sizeof(char));
+    }
+
+    int pn ;
+    for(pn = 0 ;kn < strlen(tagStr) ; pn++)
+    {
+        int in ,countFlag=1;
+        for(in=0 ; kn<strlen(tagStr) ; in++)
+        {
+            kn++ ;
+            localflag = 0 ;
+            if(tagStr[kn]=='>' || flagForNextContents == 1)
+            {
+                int jn ;
+                for(jn=0 ; kn<strlen(tagStr) ; jn++)
+                {
+                    kn++ ;
+                    if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
+                    {
+                        countFlag-- ;
+                    }
+
+                    else if(tagStr[kn]=='<')
+                    {
+                        countFlag++ ;
+                    }
+
+                    if(tagStr[kn]=='<' && countFlag==0 )
+                    {
+                        //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
+                        localflag = 1 ;
+                        //printf("Stringsssssss:%s\n",stringResult[pn]) ;
+                        break ;
+                    }
+
+
+                    else if(tagStr[kn]=='<' && countFlag==1 )
+                    {
+                        //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
+                        int mn ;
+                        for(mn=0 ; tagStr[kn]!='>' ;mn++ )
+                        {
+                            stringResult[pn][jn+mn] = tagStr[kn] ;
+                            kn++ ;
+                        }
+                        stringResult[pn][jn+mn] = tagStr[kn] ;
+                        stringResult[pn][jn+mn+1] = '\0' ;
+                        kn-- ;
+                        flagForNextContents = 1 ;
+                        localflag = 1 ;
+                        //printf("Stringsssssss:%s\n",stringResult[pn]) ;
+                        break ;
+                    }
+
+                    stringResult[pn][jn] = tagStr[kn] ;
+
+                }
+            }
+            if(localflag==1) break ;
+        }
+        if(localflag==2) break ;
+    }
+
+    return stringResult ;
+}
+
+int sizeOfTagContainsList(char tagStr[1000]){
+    int in ,count = 0 ;
+    int countFlag=1 ,kn;
+    for(kn=0 ; kn<strlen(tagStr) ; kn++)
+    {
+        if(tagStr[kn]=='>')
+        {
+            int jn ;
+            kn++ ;
+            for(jn=0 ; kn<strlen(tagStr) ; jn++)
+            {
+                if(tagStr[kn]=='<' && tagStr[kn+1]=='/') countFlag-- ;
+
+                else if(tagStr[kn]=='<') countFlag++ ;
+
+                if(tagStr[kn]=='<' && countFlag==1 )
+                {
+                    int mn ;
+                    for(mn=0 ; tagStr[kn]!='>' ;mn++ ){
+                        kn++ ;
+                    }
+                    kn-- ;
+                    count++ ;
+                    break ;
+                }
+                kn++ ;
+            }
+        }
+    }
+    return count ;
 }
 
 int sizeOfTagList(char tagStr[1000]){
