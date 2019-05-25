@@ -8,12 +8,6 @@ int flagForEmptyTag1 = 0 ;
 
 int findTagFlag = 0,cssIdentifyFlag = -1 ,flagForFindParent = -1  ;
 
-char* find_all(struct Node *current,char *tag);
-char* find(struct Node *current,char *tag);
-char* findParent(struct Node *current,char *fullTagStr,char *tag);
-char* findNextSublings(struct Node* current,char *fullTagStr);
-char* findNextSublings(struct Node* current,char *fullTagStr);
-
 char* findAllTag(struct Node *current,char *tag);
 void findAll_byAttrString(struct Node *current,char *AttrString,int flag);
 void findAll_checkAttr(char *attr,int flag);
@@ -25,9 +19,10 @@ char* findParent_byTag(struct Node* current,char *strTag,char *currentTagStr,cha
 void findNextOrPreviousSublings_byBackAndForwardTraverse(struct Node* current ,char tag ,int spFlag , int sublingsFlag) ;
 char* findNextOrPreviousSublings(struct Node* current,char *fullTagStr,int sublingsFlag) ;
 
-char* find_all(struct Node *current,char *tag)
+char* find_byRE(struct Node *current,char *re)
 {
-    char *sujon= findAllTag(current,tag) ;
+    printf("re:%s\n",re) ;
+    findAll_byRE(current,re) ;
     int i ;
     for(i=fullTag_count-2 ; i>0 ; i--)
     {
@@ -38,21 +33,138 @@ char* find_all(struct Node *current,char *tag)
     fullTag[fullTag_count-1] = ']' ;
     fullTag[fullTag_count] = '\0' ;
 
-    return sujon ;
+}
+
+void findAll_byRE(struct Node *current,char re[100])
+{
+    int i , flagforEquality = 0 ;
+    char* strr = current->tag ;
+    //printf("%s\t%s\n",strr,re) ;
+    for(i=1 ; i<strlen(strr) && strr[0]=='<' ; i++)
+    {
+        if(strr[i]==re[0])
+        {
+            flagforEquality = 1 ;
+            int j ;
+            for(j=1,i=i+1 ; j < strlen(re) ; j++,i++)
+            {
+                if(strr[i]!=re[j])
+                {
+                    flagforEquality = -1 ;
+                    break ;
+                }
+            }
+
+            if(flagforEquality==1)
+            {
+                break ;
+            }
+        }
+    }
+
+    if(flagforEquality==1)
+    {
+        if(findTagFlag==1 || findTagFlag==0)
+        {
+                findAll_byTagOrAttrString_getFullTag(current) ;
+
+                fullTag[fullTag_count] = ',' ;
+                fullTag_count++ ;
+                fullTag[fullTag_count] = '\n' ;
+                fullTag_count++ ;
+
+                if(findTagFlag==1)
+                {
+                    findTagFlag = -1 ;
+                    return ;
+                }
+        }
+     }
+
+    for(i=0 ; i<1000 ; i++)
+    {
+        if((current->children[i])!=NULL)
+        {
+            findAll_byRE(current->children[i] ,re ) ;
+        }
+        else break ;
+    }
+}
+
+
+char* findAll(struct Node *current,char *tag)
+{
+    memset(fullTag,0,strlen(fullTag)) ;
+    fullTag_count = 0 ;
+    findTagFlag = 0 ;
+
+    int i ,flagForRE = 1;
+    char reCompile[11] = "re.compile(" ;
+    for(i=0 ; i<11 ; i++ )
+    {
+        if(reCompile[i]!=tag[i]){
+            flagForRE = -1 ;
+            break ;
+        }
+    }
+
+    if(flagForRE==1)
+    {
+        char* re = (char*) malloc(100) ;
+        for(i=11 ; i < strlen(tag)-1 ; i++)
+        {
+            re[i-11] = tag[i] ;
+        }
+        re[strlen(tag)-1] = '\0' ;
+
+        find_byRE(current,re) ;
+        return fullTag ;
+    }
+
+    char *fullTagByFindAllFunction = findAllTag(current,tag) ;
+
+    for(i=fullTag_count-2 ; i>0 ; i--)
+    {
+        fullTag[i] = fullTag[i-1] ;
+    }
+
+    fullTag[0] = '[' ;
+    fullTag[fullTag_count-1] = ']' ;
+    fullTag[fullTag_count] = '\0' ;
+
+    char *findAllSujon=(char*) malloc(fullTag_count+5);
+
+    for(i=0 ; i<fullTag_count ;i++){
+        findAllSujon[i] = fullTag[i] ;
+    }
+    findAllSujon[fullTag_count] = '\0' ;
+
+    return findAllSujon;
 }
 
 char* find(struct Node *current,char *tag)
 {
+    memset(fullTag,0,strlen(fullTag)) ;
+    fullTag_count = 0 ;
     findTagFlag = 1 ;
-    char *sujon= findAllTag(current,tag) ;
 
-    return sujon ;
+    char *fullTagByFindFunction= findAllTag(current,tag) ;
+
+    char *findSujon=(char*) malloc(fullTag_count);
+
+    int i ;
+    for(i=0 ; i<fullTag_count ;i++){
+        findSujon[i] = fullTagByFindFunction[i] ;
+    }
+    findSujon[fullTag_count] = '\0' ;
+
+    return findSujon ;
 }
 
 char* findParent(struct Node *current,char *fullTagStr,char *tag)
 {
-
     findTagFlag = 0 ;
+
     char *strTag=(char*) malloc(100);
     char *currentTagStr=(char*) malloc(1000);
     int i ;
@@ -77,9 +189,12 @@ char* findParent(struct Node *current,char *fullTagStr,char *tag)
 
         strTag[i] = fullTagStr[i] ;
     }
+
     fullTag[0] = '\0' ;
     fullTag_count = 0 ;
+
     //printf("%s\n%s\n",strTag,currentTagStr) ;
+
     findParent_byTag(current,strTag,currentTagStr,tag,-5 , 0) ;
 
     return fullTag ;
@@ -87,14 +202,15 @@ char* findParent(struct Node *current,char *fullTagStr,char *tag)
 
 char* findNextSublings(struct Node* current,char *fullTagStr)
 {
+    flagForFindParent = -1 ;
     return findNextOrPreviousSublings(current,fullTagStr,1) ;
 }
 
 char* findPreviousSublings(struct Node* current,char *fullTagStr)
 {
+    flagForFindParent = -1 ;
     return findNextOrPreviousSublings(current,fullTagStr,-1) ;
 }
-
 
 char* findAllTag(struct Node *current,char *tag)
 {
@@ -581,6 +697,7 @@ void findAll_byTagOrAttrString_getFullTag(struct Node *current)
         }
         flagForEmptyTag1 = 0 ;
      }
+
 }
 
 
@@ -715,18 +832,21 @@ char* findParent_byTag(struct Node* current,char *strTag,char *currentTagStr,cha
 
     for(i=0 ; i<strlen(strr)&&strlen(strr)==strlen(strTag) ; i++)
     {
+            //printf("fulltag:8%s\t8%s\n",strr,strTag) ;
             flagforEquality = 1 ;
             if(strr[i]!=strTag[i])
             {
                 flagforEquality = -1 ;
                 break ;
             }
+
     }
 
     if(flagforEquality==1)
     {
         if(findTagFlag==1 || findTagFlag==0)
         {
+
                 findAll_byTagOrAttrString_getFullTag(current) ;
 
                 fullTag[fullTag_count] = '\0' ;

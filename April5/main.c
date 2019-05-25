@@ -3,37 +3,52 @@
 int main()
 {
     struct Node *root = htmlPerser() ;
-
-    char *sujon = find(root,"<p>") ;
-    printf("FullTag:%s\n",sujon) ;
-
-    char *str = findPreviousSublings(root,sujon) ;
-    printf("tag Name:%s\n",str) ;
-
-    /*char *tag = getTagName(sujon) ;
-    printf("tag Name:%s\n",tag) ;
-
-    char *children = getTagChildren(sujon) ;
-    printf("%s tag Contents:%s\n",tag,children) ;
-
-    char **contents = getTagContents(sujon) ;
     int i ;
-    for(i=0 ; i<sizeOfTagContainsList(sujon) ;i++){
-        printf("Contents:%s\n",contents[i]) ;
+
+    char *findStr = find(root,"<p>") ;
+    printf("find:\n%s\n\n",findStr) ;
+
+    char *findAllStr = findAll(root,"<p>") ;
+    printf("findAll:\n%s\n\n",findAllStr) ;
+
+    char *findPrnt = findParent(root,findStr,"<body>");
+    printf("findParent:\n%s\n\n",findPrnt) ;
+
+    char *findPrSub = findPreviousSublings(root,findStr);
+    printf("findPreviousSublings:\n%s\n\n",findPrSub) ;
+
+    char *findNxtSub = findNextSublings(root,findStr);
+    printf("findNextSublings:\n%s\n\n",findNxtSub) ;
+
+    char *tag = getTagName(findStr) ;
+    printf("getTagName:\n%s\n\n",tag) ;
+
+
+    char **tagAll = getAllTagName(findAllStr) ;
+
+    printf("getAllTagName:\n") ;
+    for(i=0 ; i<sizeOfTagList(findAllStr) ;i++){
+       printf("%s\t",tagAll[i]) ;
     }
 
-    char **tagList = getAllTagName(sujon) ;
+    char *tagStr = getTagString(findStr) ;
+    printf("\n\ngetTagString:\n%s\n\n",tagStr) ;
 
 
-    for(i=0 ; i<sizeOfTagList(sujon) ;i++){
-        printf("Tag:%s\n",tagList[i]) ;
+    char **tagAllStr = getAllTagString(findAllStr) ;
+    printf("getAllTagString:%s\n",findAllStr) ;
+    for(i=0 ; i<sizeOfTagList(findAllStr) ;i++){
+       printf("%s\t",tagAllStr[i]) ;
     }
 
-    char **str = getAllTagString(sujon) ;
+    char *tagChildren = getTagChildren(findStr) ;
+    printf("\n\ngetTagChildren:%s\n",tagChildren) ;
 
-    for(i=0 ; i<sizeOfTagList(sujon) ;i++){
-        printf("str:%s\n",str[i]) ;
-    }*/
+    char **tagContents = getTagContents(findStr) ;
+    printf("getTagContents:\n") ;
+    for(i=0 ; i<sizeOfTagContainsList(findAllStr) ;i++){
+        printf("%s\n",tagContents[i]) ;
+    }
 
     return 0 ;
 }

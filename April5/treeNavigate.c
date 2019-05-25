@@ -207,13 +207,23 @@ char** getTagContents(char tagStr[1000])
         {
             kn++ ;
             localflag = 0 ;
-            if(tagStr[kn]=='>' || flagForNextContents == 1)
+            if(tagStr[kn]=='>' || flagForNextContents == 1 )
             {
-                int jn ;
+                int jn ,stn,countFlagForString = -1 ;
+                stn = kn+1 ;
                 for(jn=0 ; kn<strlen(tagStr) ; jn++)
                 {
                     kn++ ;
-                    if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
+
+                    printf("matha:%c\t%c\n",tagStr[stn],tagStr[kn]) ;
+                    if(tagStr[stn]!='<'&&tagStr[kn+1]=='<'&&countFlag==1)
+                    {
+                        printf("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm") ;
+                        countFlagForString = 1 ;
+                        kn= kn -1 ;
+                    }
+
+                    else if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
                     {
                         countFlag-- ;
                     }
@@ -227,12 +237,18 @@ char** getTagContents(char tagStr[1000])
                     {
                         //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
                         localflag = 1 ;
-                        //printf("Stringsssssss:%s\n",stringResult[pn]) ;
+                        printf("Stringsssssss:%s\n",stringResult[pn]) ;
                         break ;
                     }
 
+                    else if(countFlagForString==1){
+                         stringResult[pn][jn] = '\0' ;
+                         kn-- ;
+                         localflag = 1 ;
+                         break ;
+                    }
 
-                    else if(tagStr[kn]=='<' && countFlag==1 )
+                    else if(tagStr[kn]=='<' && countFlag==1)
                     {
                         //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
                         int mn ;
@@ -262,7 +278,8 @@ char** getTagContents(char tagStr[1000])
     return stringResult ;
 }
 
-int sizeOfTagContainsList(char tagStr[1000]){
+int sizeOfTagContainsList(char tagStr[1000])
+{
     int in ,count = 0 ;
     int countFlag=1 ,kn;
     for(kn=0 ; kn<strlen(tagStr) ; kn++)
