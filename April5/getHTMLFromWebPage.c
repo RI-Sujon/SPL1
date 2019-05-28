@@ -3,12 +3,12 @@
 
 #pragma comment(lib,"ws2_32.lib")
 
-void getHtmlPage(int argc , char *argv[])
+void getHtmlPage(char *host)
 {
 	WSADATA wsa;
 	SOCKET s;
 	struct sockaddr_in server;
-	char *host = "www.lged.gov.bd";
+	//char *host = "www.lged.gov.bd";
 	struct hostent *serversock;
 	char message[50000] , server_reply[200000];
 	int recv_size;
@@ -25,7 +25,7 @@ void getHtmlPage(int argc , char *argv[])
 		printf("Could not create socket : %d" , WSAGetLastError());
 	}
 
-	printf("Socket created.\n");
+	//printf("Socket created.\n");
     serversock = gethostbyname(host);
     if (serversock == NULL) printf("ERROR, no such host");
 
@@ -40,11 +40,10 @@ void getHtmlPage(int argc , char *argv[])
 		printf("connect error");
 		return 1;
 	}
-	//puts("Connected");
 
 	const char* msg = "GET /%s HTTP/1.0\r\nHost: %s\r\nUser-Agent: fetch.c\r\n\r\n";
 	int status=sprintf(message,msg,"",host);
-	printf("status %s",message);
+	//printf("status %s",message);
 	if( status>=0&& send(s , message , strlen(message) , 0) < 0)
 	{
 		printf("Send failed");
@@ -62,9 +61,9 @@ void getHtmlPage(int argc , char *argv[])
     //printf(server_reply);
 
 	 FILE *fptr ;
-    fptr = fopen("program.html","w") ;
+    fptr = fopen("program1.html","w") ;
 
-    printf("sss: %d\n" ,recv_size) ;
+    //printf("sss: %d\n" ,recv_size) ;
 
     int j ,flag = 0;
     for(j=0 ; j<recv_size ; j++)

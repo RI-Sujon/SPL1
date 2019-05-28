@@ -292,7 +292,7 @@ char** getTagContents(char tagStr[1000])
 }
 
 
-int sizeOfTagContainsList(char tagStr[1000])
+int numberOfChildren(char tagStr[1000])
 {
     int i , kn=0 , flagForNextContents = 0 ,localflag = 0 ;
     int count = 0 ;
@@ -369,7 +369,7 @@ int sizeOfTagContainsList(char tagStr[1000])
 }
 
 
-int sizeOfTagList(char tagStr[1000]){
+int numberOfTag(char tagStr[1000]){
     int in ,count = 0 ;
     for(in=0 ; in<strlen(tagStr) ; in++)
     {

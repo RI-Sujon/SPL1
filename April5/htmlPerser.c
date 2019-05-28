@@ -418,7 +418,7 @@ void createTreeControl()
 
 struct Node* htmlPerser()
 {
-    //getHtmlPage() ;
+    //getHtmlPage(host) ;
     createLinkList() ;
     createTreeControl() ;
     //outputTreePreOrder(root) ;

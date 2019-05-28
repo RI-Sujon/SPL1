@@ -770,7 +770,6 @@ void outputTreePreOrder(struct Node *parent)
     int i ;
     for(i=0 ; i<1000 ; i++)
     {
-
         if((parent->children[i])!=NULL)
         {
             outputTreePreOrder(parent->children[i]) ;

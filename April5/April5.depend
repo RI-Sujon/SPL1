@@ -27,7 +27,7 @@
 	<stdio.h>
 	<winsock2.h>
 
-1558988859 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\htmlperser.c
+1559085439 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\htmlperser.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -36,14 +36,18 @@
 
 1558777373 c:\users\rabiul islam sujon\desktop\finalspl1\april5\library.h
 
-1558989158 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\main.c
+1559077370 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\main.c
 	<stdio.h>
 
-1558988617 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\treenavigate.c
+1559081535 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\treenavigate.c
 	<stdlib.h>
 	"library.h"
 
-1558982429 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\treetraverse.c
+1559028299 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\treetraverse.c
 	<stdlib.h>
 	"library.h"
+
+1559077424 source:c:\users\rabiul islam sujon\desktop\finalspl1\april5\gethtmlfromwebpage.c
+	<stdio.h>
+	<winsock2.h>
 
