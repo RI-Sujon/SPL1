@@ -7,43 +7,38 @@
 			<Cursor1 position="13" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="treeNavigate.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="213" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="treeNavigate.c" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6301" topLine="213" />
-		</Cursor>
-	</File>
-	<File name="treeTraverse.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3844" topLine="319" />
-		</Cursor>
-		<Folding>
-			<Collapse line="145" />
-			<Collapse line="164" />
-			<Collapse line="203" />
-			<Collapse line="209" />
-			<Collapse line="215" />
-			<Collapse line="414" />
-			<Collapse line="477" />
-		</Folding>
-	</File>
-	<File name="htmlPerser.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1858" topLine="391" />
+			<Cursor1 position="5317" topLine="68" />
 		</Cursor>
 	</File>
 	<File name="GetPageFageFromWebsite.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1774" topLine="46" />
+			<Cursor1 position="1774" topLine="39" />
 		</Cursor>
 	</File>
 	<File name="ict4.html" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="419" topLine="0" />
+			<Cursor1 position="202" topLine="0" />
 		</Cursor>
+	</File>
+	<File name="htmlPerser.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2013" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="127" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="treeTraverse.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4033" topLine="951" />
+		</Cursor>
+		<Folding>
+			<Collapse line="203" />
+			<Collapse line="209" />
+		</Folding>
 	</File>
 </CodeBlocks_layout_file>

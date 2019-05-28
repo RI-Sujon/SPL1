@@ -150,7 +150,7 @@ char* find(struct Node *current,char *tag)
 
     char *fullTagByFindFunction= findAllTag(current,tag) ;
 
-    char *findSujon=(char*) malloc(fullTag_count);
+    char *findSujon=(char*) malloc(fullTag_count+10000);
 
     int i ;
     for(i=0 ; i<fullTag_count ;i++){

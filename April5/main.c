@@ -5,7 +5,7 @@ int main()
     struct Node *root = htmlPerser() ;
     int i ;
 
-    char *findStr = find(root,"<p>") ;
+    char *findStr = find(root,"<style>") ;
     printf("find:\n%s\n\n",findStr) ;
 
     char *findAllStr = findAll(root,"<p>") ;
@@ -45,8 +45,8 @@ int main()
     printf("\n\ngetTagChildren:%s\n",tagChildren) ;
 
     char **tagContents = getTagContents(findStr) ;
-    printf("getTagContents:\n") ;
-    for(i=0 ; i<sizeOfTagContainsList(findAllStr) ;i++){
+    printf("getTagContents:%d\n",sizeOfTagContainsList(findStr)) ;
+    for(i=0 ; i<sizeOfTagContainsList(findStr) ;i++){
         printf("%s\n",tagContents[i]) ;
     }
 

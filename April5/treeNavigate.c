@@ -183,12 +183,19 @@ char* getTagChildren(char tagStr[1000])
                     stringResult[jn+mn+1] = '\0' ;
                     return stringResult ;
                 }
+
+                else if(tagStr[in+1+jn]=='<' && countFlag==2 && tagStr[in+1+jn-1]!='>' && tagStr[in+1+jn+1]!='/' )
+                {
+                    stringResult[jn] = '\0' ;
+                    return stringResult ;
+                }
                 stringResult[jn] = tagStr[in+1+jn] ;
             }
         }
     }
 
 }
+
 
 char** getTagContents(char tagStr[1000])
 {
@@ -199,6 +206,8 @@ char** getTagContents(char tagStr[1000])
         stringResult[i] = malloc(1000 * sizeof(char));
     }
 
+    int flagForStringChildren = 0 ;
+
     int pn ;
     for(pn = 0 ;kn < strlen(tagStr) ; pn++)
     {
@@ -207,23 +216,13 @@ char** getTagContents(char tagStr[1000])
         {
             kn++ ;
             localflag = 0 ;
-            if(tagStr[kn]=='>' || flagForNextContents == 1 )
+            if(tagStr[kn]=='>' || flagForNextContents == 1)
             {
-                int jn ,stn,countFlagForString = -1 ;
-                stn = kn+1 ;
+                int jn ;
                 for(jn=0 ; kn<strlen(tagStr) ; jn++)
                 {
                     kn++ ;
-
-                    printf("matha:%c\t%c\n",tagStr[stn],tagStr[kn]) ;
-                    if(tagStr[stn]!='<'&&tagStr[kn+1]=='<'&&countFlag==1)
-                    {
-                        printf("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm") ;
-                        countFlagForString = 1 ;
-                        kn= kn -1 ;
-                    }
-
-                    else if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
+                    if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
                     {
                         countFlag-- ;
                     }
@@ -233,24 +232,27 @@ char** getTagContents(char tagStr[1000])
                         countFlag++ ;
                     }
 
-                    if(tagStr[kn]=='<' && countFlag==0 )
+                    if(tagStr[kn]=='<' && countFlag==0 && tagStr[kn-1]!='>' && tagStr[kn+1]=='/' && flagForStringChildren==0 )
                     {
-                        //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
+                        stringResult[pn][jn] = '\0' ;
+                        kn = kn - 2  ;
+                        flagForNextContents = 1 ;
+                        flagForStringChildren = 1 ;
                         localflag = 1 ;
-                        printf("Stringsssssss:%s\n",stringResult[pn]) ;
+                        countFlag = 1 ;
+                        //printf("StringsssssssNew:%s\n",stringResult[pn]) ;
                         break ;
                     }
 
-                    else if(countFlagForString==1){
-                         stringResult[pn][jn] = '\0' ;
-                         kn-- ;
-                         localflag = 1 ;
-                         break ;
+                    else if(tagStr[kn]=='<' && countFlag==0 )
+                    {
+                        localflag = 1 ;
+                        //printf("Stringsssssss:%s\n",stringResult[pn]) ;
+                        break ;
                     }
 
-                    else if(tagStr[kn]=='<' && countFlag==1)
+                    else if(tagStr[kn]=='<' && countFlag==1 )
                     {
-                        //printf("Stringsssssss:%s\t%d\n",stringResult,countFlag) ;
                         int mn ;
                         for(mn=0 ; tagStr[kn]!='>' ;mn++ )
                         {
@@ -260,14 +262,25 @@ char** getTagContents(char tagStr[1000])
                         stringResult[pn][jn+mn] = tagStr[kn] ;
                         stringResult[pn][jn+mn+1] = '\0' ;
                         kn-- ;
+                        flagForStringChildren = 0 ;
                         flagForNextContents = 1 ;
                         localflag = 1 ;
                         //printf("Stringsssssss:%s\n",stringResult[pn]) ;
                         break ;
                     }
 
+                    else if(tagStr[kn]=='<' && countFlag==2 && tagStr[kn-1]!='>' && tagStr[kn+1]!='/' && flagForStringChildren==0 )
+                    {
+                        stringResult[pn][jn] = '\0' ;
+                        kn = kn - 2  ;
+                        flagForNextContents = 1 ;
+                        flagForStringChildren = 1 ;
+                        localflag = 1 ;
+                        countFlag = 1 ;
+                        //printf("StringsssssssNew:%s\n",stringResult[pn]) ;
+                        break ;
+                    }
                     stringResult[pn][jn] = tagStr[kn] ;
-
                 }
             }
             if(localflag==1) break ;
@@ -278,38 +291,83 @@ char** getTagContents(char tagStr[1000])
     return stringResult ;
 }
 
+
 int sizeOfTagContainsList(char tagStr[1000])
 {
-    int in ,count = 0 ;
-    int countFlag=1 ,kn;
-    for(kn=0 ; kn<strlen(tagStr) ; kn++)
+    int i , kn=0 , flagForNextContents = 0 ,localflag = 0 ;
+    int count = 0 ;
+    int flagForStringChildren = 0 ;
+    int pn ;
+
+    for(pn = 0 ;kn < strlen(tagStr) ; pn++)
     {
-        if(tagStr[kn]=='>')
+        int in ,countFlag=1;
+        for(in=0 ; kn<strlen(tagStr) ; in++)
         {
-            int jn ;
             kn++ ;
-            for(jn=0 ; kn<strlen(tagStr) ; jn++)
+            localflag = 0 ;
+            if(tagStr[kn]=='>' || flagForNextContents == 1)
             {
-                if(tagStr[kn]=='<' && tagStr[kn+1]=='/') countFlag-- ;
-
-                else if(tagStr[kn]=='<') countFlag++ ;
-
-                if(tagStr[kn]=='<' && countFlag==1 )
+                int jn ;
+                for(jn=0 ; kn<strlen(tagStr) ; jn++)
                 {
-                    int mn ;
-                    for(mn=0 ; tagStr[kn]!='>' ;mn++ ){
-                        kn++ ;
+                    kn++ ;
+                    if(tagStr[kn]=='<' && tagStr[kn+1]=='/')
+                    {
+                        countFlag-- ;
                     }
-                    kn-- ;
-                    count++ ;
-                    break ;
+
+                    else if(tagStr[kn]=='<')
+                    {
+                        countFlag++ ;
+                    }
+
+                    if(tagStr[kn]=='<' && countFlag==0 && tagStr[kn-1]!='>' && tagStr[kn+1]=='/' && flagForStringChildren==0 )
+                    {
+                        count++ ;
+                        kn = kn - 2  ;
+                        flagForNextContents = 1 ;
+                        flagForStringChildren = 1 ;
+                        localflag = 1 ;
+                        break ;
+                    }
+
+                    else if(tagStr[kn]=='<' && countFlag==0 )
+                    {
+                        localflag = 1 ;
+                        break ;
+                    }
+
+                    else if(tagStr[kn]=='<' && countFlag==1 )
+                    {
+                        count++ ;
+                        kn-- ;
+                        flagForStringChildren = 0 ;
+                        flagForNextContents = 1 ;
+                        localflag = 1 ;
+                        break ;
+                    }
+
+                    else if(tagStr[kn]=='<' && countFlag==2 && tagStr[kn-1]!='>' && tagStr[kn+1]!='/' && flagForStringChildren==0 )
+                    {
+                        count++ ;
+                        kn = kn - 2  ;
+                        flagForNextContents = 1 ;
+                        flagForStringChildren = 1 ;
+                        localflag = 1 ;
+                        countFlag = 1 ;
+                        break ;
+                    }
                 }
-                kn++ ;
             }
+            if(localflag==1) break ;
         }
+        if(localflag==2) break ;
     }
+
     return count ;
 }
+
 
 int sizeOfTagList(char tagStr[1000]){
     int in ,count = 0 ;
